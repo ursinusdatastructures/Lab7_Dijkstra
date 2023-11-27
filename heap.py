@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class MinPQ(object):
     def __init__(self):
-        # Each arraylist entry is stored as a tuple (priority, obj)
+        # Each arraylist entry is stored as a tuple (priority, (label, obj))
         # The smallest priority is at index 0
         self._arr = [] 
 
