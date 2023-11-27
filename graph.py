@@ -45,9 +45,20 @@ class Graph:
         
         Perform Dijkstra's algorithm to find the lengths of the shortest 
         paths from "start" to all other vertices
+
+        Parameters
+        ----------
+        start: hashable
+            Lable of vertex at which to start the search
+        
+        Returns
+        -------
+        dictionary: label->distance
+            Distance of all vertices from the start
         """
         frontier = MinPQ()
         frontier.push((0, self.vertices[start]))
+        distances = {} ## TODO: Fill this in
         # Each vertex passes through the frontier exactly once
         while len(frontier) > 0: # O(V) iterations
             pass
@@ -60,3 +71,5 @@ class Graph:
             # b) If it's already on the queue and d' is less than its priority, 
             # update the priority
             # Otherwise, if it's already been visited, do nothing
+        
+        return distances
