@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class MinPQ(object):
     def __init__(self):
-        # Each arraylist entry is stored as a tuple (priority, (label, obj))
+        # Each arraylist entry is stored as the list [priority, (label, obj)]
         # The smallest priority is at index 0
         self._arr = [] 
 
@@ -157,8 +157,8 @@ class MinPQ(object):
 
         Parameters
         ----------
-        entry: (float, (hashable, obj))
-            Tuple of (priority, (label, object))
+        entry: [float, (hashable, object)]
+            List of [priority, (label, object)]
         """
         self._arr.append(entry)
         self._upheap(len(self._arr)-1)
@@ -181,10 +181,10 @@ class MinPQ(object):
 
 if __name__ == '__main__':
     queue = MinPQ()
-    queue.push((4, ("chris", "chris")))
-    queue.push((2, ("james", "james")))
-    queue.push((3, ("celia", "celia")))
-    queue.push((5, ("abby", "abby")))
+    queue.push([4, ("chris", "chris")])
+    queue.push([2, ("james", "james")])
+    queue.push([3, ("celia", "celia")])
+    queue.push([5, ("abby", "abby")])
     queue.update_priority("chris", 1)
     queue.draw()
     plt.show()
