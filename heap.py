@@ -6,6 +6,7 @@ class MinPQ(object):
         # Each arraylist entry is stored as the list [priority, (label, obj)]
         # The smallest priority is at index 0
         self._arr = [] 
+        self.label2idx = {}
 
     def __len__(self):
         return len(self._arr)
@@ -65,7 +66,7 @@ class MinPQ(object):
                 x0 -= 2**(height-level-1)
             stride = 2**(height-level)
             x = x0 + xi*stride
-            y = -5*level
+            y = -3*level
             plt.scatter([x], [y], 100, c='k')
             s = "{}".format(self._arr[i][0])
             if self._arr[i][1]:
@@ -86,6 +87,8 @@ class MinPQ(object):
         Swap the information stored in each node
         """
         self._arr[i], self._arr[j] = self._arr[j], self._arr[i]
+        self.label2idx[self._arr[i][1][0]] = i
+        self.label2idx[self._arr[j][1][0]] = j
 
     def _upheap(self, i):
         """
@@ -134,8 +137,7 @@ class MinPQ(object):
         -------
         float: The priority
         """
-        pass
-        ## TODO: Fill this in
+        return self._arr[self.label2idx[label]][0]
 
     def update_priority(self, label, priority):
         """
@@ -148,8 +150,10 @@ class MinPQ(object):
         priority: float
             New priority of object
         """
-        pass
-        ## TODO: Fill this in
+        idx = self.label2idx[label]
+        self._arr[idx][0] = priority
+        self._downheap(idx)
+        self._upheap(self.label2idx[label])
 
     def push(self, entry):
         """
@@ -190,6 +194,6 @@ if __name__ == '__main__':
     queue.push([6, ("silvio", "silvio")])
     queue.push([5, ("mary", "mary")])
     queue.draw()
-    plt.show()
+    plt.savefig("AfterUpdate.svg", bbox_inches='tight')
     while len(queue) > 0:
         print(queue.pop())
