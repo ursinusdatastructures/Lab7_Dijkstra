@@ -72,3 +72,21 @@ class Graph:
             # Otherwise, if it's already been visited, do nothing
         
         return distances
+    
+    def backtrace(self, x):
+        """
+        After running Dijkstra's, backtrace from a particular vertex
+        x to where Dijsktra's was initiated
+
+        Parameters
+        ----------
+        x: hashable
+            Vertex that we ended up at
+        
+        Returns
+        -------
+        list of hashable: path from start vertex to x
+        """
+        path = [x]
+        ## TODO: Fill this in
+        return path
