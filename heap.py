@@ -170,25 +170,25 @@ class MinPQ(object):
         
         Returns
         -------
-        obj: Lowest priority object
+        [float, (hashable, object)]: prority and lowest priority object
         """
         assert(len(self) > 0)
         ret = self._arr[0]
         self._arr[0] = self._arr[-1]
         self._arr.pop()
         self._downheap(0)
-        return ret[1][1]
+        return ret
 
 if __name__ == '__main__':
     queue = MinPQ()
-    queue.push([4, ("chris", "chris")])
-    queue.push([2, ("james", "james")])
-    queue.push([3, ("celia", "celia")])
-    queue.push([5, ("abby", "abby")])
+    queue.push([4, ("chris", None)])
+    queue.push([2, ("james", None)])
+    queue.push([3, ("celia", None)])
+    queue.push([5, ("abby", None)])
     queue.update_priority("chris", 1)
     queue.update_priority("james", 7)
-    queue.push([6, ("silvio", "silvio")])
-    queue.push([5, ("mary", "mary")])
+    queue.push([6, ("silvio", None)])
+    queue.push([5, ("mary", None)])
     queue.draw()
     plt.show()
     while len(queue) > 0:
