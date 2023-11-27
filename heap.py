@@ -177,4 +177,4 @@ class MinPQ(object):
         self._arr[0] = self._arr[-1]
         self._arr.pop()
         self._downheap(0)
-        return ret[1]
+        return ret[1][1]
