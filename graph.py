@@ -57,7 +57,7 @@ class Graph:
             Distance of all vertices from the start
         """
         frontier = MinPQ()
-        frontier.push((0, self.vertices[start]))
+        frontier.push([0, start, self.vertices[start]])
         distances = {} ## TODO: Fill this in
         # Each vertex passes through the frontier exactly once
         while len(frontier) > 0: # O(V) iterations
