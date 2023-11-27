@@ -1,4 +1,4 @@
-from heap import *
+from heap import MinPQ
 
 UNTOUCHED = 0
 FRONTIER = 1
