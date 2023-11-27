@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 class MinPQ(object):
     def __init__(self):
-        # Each arraylist entry is stored as the list [priority, (label, obj)]
+        # Each arraylist entry is stored as the list [priority, label]
         # The smallest priority is at index 0
         self._arr = [] 
 
@@ -69,7 +69,7 @@ class MinPQ(object):
             plt.scatter([x], [y], 100, c='k')
             s = "{}".format(self._arr[i][0])
             if self._arr[i][1]:
-                s = s + " ({})".format(self._arr[i][1][0])
+                s = s + " ({})".format(self._arr[i][1])
             plt.text(x+0.5, y, s)
             xs[i] = x
             ys[i] = y
@@ -157,8 +157,8 @@ class MinPQ(object):
 
         Parameters
         ----------
-        entry: [float, (hashable, object)]
-            List of [priority, (label, object)]
+        entry: [float, hashable]
+            List of [priority, label]
         """
         self._arr.append(entry)
         self._upheap(len(self._arr)-1)
@@ -170,7 +170,7 @@ class MinPQ(object):
         
         Returns
         -------
-        [float, (hashable, object)]: prority and lowest priority object
+        [float, hashable]: prority and lowest priority object
         """
         assert(len(self) > 0)
         ret = self._arr[0]
@@ -181,14 +181,14 @@ class MinPQ(object):
 
 if __name__ == '__main__':
     queue = MinPQ()
-    queue.push([4, ("chris", None)])
-    queue.push([2, ("james", None)])
-    queue.push([3, ("celia", None)])
-    queue.push([5, ("abby", None)])
+    queue.push([4, "chris"])
+    queue.push([2, "james"])
+    queue.push([3, "celia"])
+    queue.push([5, "abby"])
     queue.update_priority("chris", 1)
     queue.update_priority("james", 7)
-    queue.push([6, ("silvio", None)])
-    queue.push([5, ("mary", None)])
+    queue.push([6, "silvio"])
+    queue.push([5, "mary"])
     queue.draw()
     plt.show()
     while len(queue) > 0:

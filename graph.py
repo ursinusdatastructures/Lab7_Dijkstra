@@ -7,7 +7,7 @@ VISITED = 2
 class Vertex:
     def __init__(self, label):
         self.label = label
-        self.neighbs = set([]) # Stores (weight, Vertex object) tuples
+        self.neighbs = set([]) # Stores (weight, vertex label) tuples
         self.state = UNTOUCHED
     
     def __repr__(self):
@@ -15,9 +15,8 @@ class Vertex:
 
 class Graph:
     def __init__(self):
-        # Key: Vertex to look up
-        # Value is the object encapsulating
-        # information about that vertex
+        # Key: Vertex label to look up
+        # Value: object encapsulating information about that vertex
         self.vertices = {}
 
     def add_vertex(self, u):
@@ -31,13 +30,13 @@ class Graph:
         ----------
         u: hashable
             Hashable identifier of first vertex (usually int or string)
-        u: hashable
+        v: hashable
             Hashable identifier of second vertex (usually int or string)
         w: float
             Weight of edge
         """
-        self.vertices[u].neighbs.add((w, self.vertices[v]))
-        self.vertices[v].neighbs.add((w, self.vertices[u]))
+        self.vertices[u].neighbs.add((w, v))
+        self.vertices[v].neighbs.add((w, u))
     
     def explore(self, start):
         """
@@ -49,7 +48,7 @@ class Graph:
         Parameters
         ----------
         start: hashable
-            Lable of vertex at which to start the search
+            Label of vertex at which to start the search
         
         Returns
         -------
@@ -57,7 +56,7 @@ class Graph:
             Distance of all vertices from the start
         """
         frontier = MinPQ()
-        frontier.push([0, (start, self.vertices[start])])
+        frontier.push([0, start])
         distances = {} ## TODO: Fill this in
         # Each vertex passes through the frontier exactly once
         while len(frontier) > 0: # O(V) iterations
