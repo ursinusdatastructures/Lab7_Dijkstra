@@ -174,7 +174,7 @@ class MinPQ(object):
         """
         assert(len(self) > 0)
         ret = self._arr[0]
-        self._arr[0] = self._arr[-1]
+        self._swap(0, len(self._arr)-1)
         self._arr.pop()
         self._downheap(0)
         return ret
