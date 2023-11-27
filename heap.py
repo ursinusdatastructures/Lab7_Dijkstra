@@ -69,7 +69,7 @@ class MinPQ(object):
             plt.scatter([x], [y], 100, c='k')
             s = "{}".format(self._arr[i][0])
             if self._arr[i][1]:
-                s = s + " ({})".format(self._arr[i][1])
+                s = s + " ({})".format(self._arr[i][1][0])
             plt.text(x+0.5, y, s)
             xs[i] = x
             ys[i] = y
@@ -178,3 +178,13 @@ class MinPQ(object):
         self._arr.pop()
         self._downheap(0)
         return ret[1][1]
+
+if __name__ == '__main__':
+    queue = MinPQ()
+    queue.push((4, ("chris", "chris")))
+    queue.push((2, ("james", "james")))
+    queue.push((3, ("celia", "celia")))
+    queue.push((5, ("abby", "abby")))
+    queue.update_priority("chris", 1)
+    queue.draw()
+    plt.show()
