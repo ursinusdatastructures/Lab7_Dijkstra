@@ -6,6 +6,8 @@ class MinPQ(object):
         # Each arraylist entry is stored as the list [priority, label]
         # The smallest priority is at index 0
         self._arr = [] 
+        ## TODO: Add data structure to remember index positions
+        ## of different labels into _arr
 
     def __len__(self):
         return len(self._arr)
@@ -86,6 +88,7 @@ class MinPQ(object):
         Swap the information stored in each node
         """
         self._arr[i], self._arr[j] = self._arr[j], self._arr[i]
+        ## TODO: Update positions of labels that have swapped
 
     def _upheap(self, i):
         """
@@ -160,6 +163,7 @@ class MinPQ(object):
         entry: [float, hashable]
             List of [priority, label]
         """
+        ## TODO: Store index of new item
         self._arr.append(entry)
         self._upheap(len(self._arr)-1)
     
