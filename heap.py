@@ -186,5 +186,10 @@ if __name__ == '__main__':
     queue.push([3, ("celia", "celia")])
     queue.push([5, ("abby", "abby")])
     queue.update_priority("chris", 1)
+    queue.update_priority("james", 7)
+    queue.push([6, ("silvio", "silvio")])
+    queue.push([5, ("mary", "mary")])
     queue.draw()
     plt.show()
+    while len(queue) > 0:
+        print(queue.pop())
