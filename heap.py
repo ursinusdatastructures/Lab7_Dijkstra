@@ -1,55 +1,110 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class MinPQ(object):
+class HeapTree(object):
     def __init__(self):
-        # Each arraylist entry is stored as the list [priority, label]
-        # The smallest priority is at index 0
-        self._arr = [] 
-        ## TODO: Add data structure to remember index positions
-        ## of different labels into _arr
+        self._arr = []
+        self._obj2idx = {} # Key: obj (hashable), Value: Index into _arr where we can find obj
 
+    def __contains__(self, obj):
+        return obj in self._obj2idx
+    
     def __len__(self):
         return len(self._arr)
 
     def _children(self, i):
         """
-        Return the indices of the children of a particular
-        node index
-
         Parameters
         ----------
         i: int
-            Node index
-        
+            Index of a node
+
         Returns
         -------
-        List of [], [int] or [int, int]
-            Children indices
+        list of indices of children of that node
         """
         children = []
-        if 2*i+1 < len(self._arr):
-            children.append(2*i+1)
-        if 2*i+2 < len(self._arr):
-            children.append(2*i+2)
+        if 2*i + 1 < len(self._arr):
+            children.append(2*i + 1)
+        if 2*i + 2 < len(self._arr):
+            children.append(2*i + 2)
         return children
     
     def _parent(self, i):
+        return (i-1)//2
+    
+    def _swap(self, i, j):
+        obji = self._arr[i][1]
+        objj = self._arr[j][1]
+        self._obj2idx[obji] = j
+        self._obj2idx[objj] = i
+        self._arr[i], self._arr[j] = self._arr[j], self._arr[i]
+        
+    
+    def _heapup(self, i):
         """
-        Compute the index of a parent of a node
-
+        Keep bubbling the node at i up until it 
+        satisfies the heap condition
+        """
+        if i > 0:
+            parent = self._parent(i)
+            if self._arr[i][0] < self._arr[parent][0]:
+                self._swap(i, parent)
+                self._heapup(parent)
+                
+    def _heapdown(self, i):
+        children = self._children(i)
+        if len(children) > 0:
+            ## Make child be the smaller of the two children
+            child = children[0]
+            if len(children) > 1:
+                if self._arr[children[1]][0] < self._arr[children[0]][0]:
+                    child = children[1]
+            if self._arr[child][0] < self._arr[i][0]:
+                self._swap(i, child)
+                self._heapdown(child)
+        
+    def push(self, entry):
+        """
         Parameters
         ----------
-        i: int
-            Node index
-        
-        Returns
-        -------
-        Index of parent of node
+        entry: (priority, obj)
         """
-        return (i-1)//2
+        ## Step 1: Put this entry at the end of the _arr
+        self._arr.append(entry)
+        self._obj2idx[entry[1]] = len(self._arr)-1
 
-    def draw(self):
+        ## Step 2: Bubble up entry until the heap condition is satisfied
+        self._heapup(len(self._arr)-1)
+    
+    def pop(self):
+        assert(len(self._arr) > 0)
+        ret = self._arr[0][1]
+        ## Move the last element to the root
+        self._arr[0] = self._arr[-1]
+        ## Take off the last element
+        self._arr.pop()
+        ## Fix up the internal structure
+        self._heapdown(0)
+        return ret
+
+    def update(self, entry):
+        """
+        Parameters
+        ----------
+        entry: (priority, obj)
+        """
+        (new_priority, obj) = entry
+        assert(obj in self)
+        idx = self._obj2idx[obj]
+        old_priority = self._arr[idx][0]
+        self._arr[idx] = (new_priority, obj)
+        if new_priority < old_priority:
+            self._heapup(idx)
+        elif new_priority > old_priority:
+            self._heapdown(idx)
+    
+    def draw(self, fac=1.5):
         N = len(self._arr)
         height = int(np.ceil(np.log2(N)))
         width = 2**height
@@ -64,15 +119,15 @@ class MinPQ(object):
             if np.log2(i+1) == int(np.log2(i+1)):
                 level += 1
                 xi = 0
-                x0 -= 2**(height-level-1)
-            stride = 2**(height-level)
+                x0 -= fac*2**(height-level-1)
+            stride = fac*2**(height-level)
             x = x0 + xi*stride
             y = -5*level
             plt.scatter([x], [y], 100, c='k')
             s = "{}".format(self._arr[i][0])
             if self._arr[i][1]:
                 s = s + " ({})".format(self._arr[i][1])
-            plt.text(x+0.5, y, s)
+            plt.text(x, y-0.7, s, horizontalalignment='center')
             xs[i] = x
             ys[i] = y
             xi += 1
@@ -82,118 +137,19 @@ class MinPQ(object):
                 plt.plot([xs[i], xs[j]], [ys[i], ys[j]])
         plt.axis("off")
         plt.axis("equal")
-    
-    def _swap(self, i, j):
-        """
-        Swap the information stored in each node
-        """
-        self._arr[i], self._arr[j] = self._arr[j], self._arr[i]
-        ## TODO: Update positions of labels that have swapped
 
-    def _upheap(self, i):
-        """
-        Move an object up the heap until it is correctly placed
-
-        Parameters
-        ----------
-        i: int
-            Index of current item
-        """
-        parent = self._parent(i)
-        if i > 0 and self._arr[i][0] < self._arr[parent][0]:
-            self._swap(i, parent)
-            self._upheap(parent)
-    
-    def _downheap(self, i):
-        """
-        Move an object up down the heap until it is correctly placed
-
-        Parameters
-        ----------
-        i: int
-            Index of current item
-        """
-        children = self._children(i)
-        if len(children) > 0:
-            child = children[0]
-            if len(children) > 1:
-                c2 = children[1]
-                if self._arr[c2][0] < self._arr[child][0]:
-                    child = c2
-            if self._arr[child][0] < self._arr[i][0]:
-                self._swap(i, child)
-                self._downheap(child)
-
-    def get_priority(self, label):
-        """
-        Get the current priority of a particular object
-
-        Parameters
-        ----------
-        label: string
-            Label of object
-        
-        Returns
-        -------
-        float: The priority
-        """
-        pass
-        ## TODO: Fill this in
-
-    def update_priority(self, label, priority):
-        """
-        Update the priority of an entry on the heap
-
-        Parameters
-        ----------
-        label: hashable
-            Label of object
-        priority: float
-            New priority of object
-        """
-        pass
-        ## TODO: Fill this in
-
-    def push(self, entry):
-        """
-        Add an entry to the heap
-
-        Parameters
-        ----------
-        entry: [float, hashable]
-            List of [priority, label]
-        """
-        ## TODO: Store index of new item
-        self._arr.append(entry)
-        self._upheap(len(self._arr)-1)
-    
-    def pop(self):
-        """
-        Remove and return the object with the lowest priority
-        from the heap
-        
-        Returns
-        -------
-        [float, hashable]: prority and lowest priority object
-        """
-        assert(len(self) > 0)
-        ret = self._arr[0]
-        self._swap(0, len(self._arr)-1)
-        self._arr.pop()
-        self._downheap(0)
-        return ret
 
 if __name__ == '__main__':
-    queue = MinPQ()
-    queue.push([4, "chris"])
-    queue.push([2, "james"])
-    queue.push([3, "celia"])
-    queue.push([5, "abby"])
-    queue.update_priority("chris", 1)
-    queue.update_priority("james", 7)
-    queue.push([6, "silvio"])
-    queue.push([5, "mary"])
-    queue.draw()
-    plt.show()
-    while len(queue) > 0:
-        print(queue.pop())
+    T = HeapTree()
+    T.push((10, "Theo"))
+    T.push((20, "Chris"))
+    T.push((5, "Celia"))
+    T.push((1, "Layla"))
+    T.push((2, "Artemis"))
+    T.push((3, "Apollo"))
+    T.update((0, "Theo"))
+    T.update((25, "Artemis"))
+    T.update((40, "Apollo"))
+    T.update((-1, "Celia"))
+    while len(T) > 0:
+        print(T.pop())
