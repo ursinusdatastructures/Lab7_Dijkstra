@@ -1,14 +1,9 @@
 from heap import MinPQ
 
-UNTOUCHED = 0
-FRONTIER = 1
-VISITED = 2
-
 class Vertex:
     def __init__(self, label):
         self.label = label
         self.neighbs = set([]) # Stores (weight, vertex label) tuples
-        self.state = UNTOUCHED
     
     def __repr__(self):
         return "{}".format(self.label)
