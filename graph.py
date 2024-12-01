@@ -63,13 +63,12 @@ class Graph:
             pass
             ## TODO: Take off the node v at the front and record its distance
 
-            # Look at each neighbor of v.  Add its weight to the distance
-            # to get d'
-            # a) If it's not on the queue and it hasn't been visited, 
-            # add the neighbor with priority d'
-            # b) If it's already on the queue and d' is less than its priority, 
-            # update the priority
-            # Otherwise, if it's already been visited, do nothing
+            # Look at each neighbor n of v.  Add its weight w to the distance d
+            # to get d' = d + w
+            # a) If n is not on the queue and it hasn't been visited, add it with priority d'
+            # b) If n is already on the queue and d' is less than its priority, 
+            #    update the priority of n to be d'
+            # Otherwise, if n has already been visited, do nothing
         
         return distances
     
