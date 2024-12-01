@@ -159,8 +159,9 @@ class MinPQ(object):
         assert(len(self._arr) > 0)
         ret = self._arr[0]
         ## Move the last element to the root
-        self._arr[0] = self._arr[-1]
+        self._swap(0, -1)
         ## Take off the last element
+        del self._obj2idx[ret[1]]
         self._arr.pop()
         ## Fix up the internal structure
         self._heapdown(0)
