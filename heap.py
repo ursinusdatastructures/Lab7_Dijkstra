@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class HeapTree(object):
+class MinPQ(object):
     def __init__(self):
         self._arr = []
         self._obj2idx = {} # Key: obj (hashable), Value: Index into _arr where we can find obj
@@ -140,16 +140,16 @@ class HeapTree(object):
 
 
 if __name__ == '__main__':
-    T = HeapTree()
-    T.push((10, "Theo"))
-    T.push((20, "Chris"))
-    T.push((5, "Celia"))
-    T.push((1, "Layla"))
-    T.push((2, "Artemis"))
-    T.push((3, "Apollo"))
-    T.update((0, "Theo"))
-    T.update((25, "Artemis"))
-    T.update((40, "Apollo"))
-    T.update((-1, "Celia"))
-    while len(T) > 0:
-        print(T.pop())
+    pq = MinPQ()
+    pq.push((10, "Theo"))
+    pq.push((20, "Chris"))
+    pq.push((5, "Celia"))
+    pq.push((1, "Layla"))
+    pq.push((2, "Artemis"))
+    pq.push((3, "Apollo"))
+    pq.update((0, "Theo"))
+    pq.update((25, "Artemis"))
+    pq.update((40, "Apollo"))
+    pq.update((-1, "Celia"))
+    while len(pq) > 0:
+        print(pq.pop())
