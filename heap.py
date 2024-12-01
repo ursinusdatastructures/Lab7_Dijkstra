@@ -7,9 +7,40 @@ class MinPQ(object):
         self._obj2idx = {} # Key: obj (hashable), Value: Index into _arr where we can find obj
 
     def __contains__(self, obj):
+        """
+        Check to see whether a particular object is in the heap
+
+        Parameters
+        ----------
+        obj: hashable object
+            The object to check
+
+        Returns
+        -------
+        True if object is in the heap, False otherwise
+        """
         return obj in self._obj2idx
     
+    def __getitem__(self, obj):
+        """
+        Return the priority of an object in the heap
+
+        Parameters
+        ----------
+        obj: hashable object
+            The object to check
+        
+        Returns
+        -------
+        Priority of this object
+        """
+        assert(obj in self)
+        return self._arr[self._obj2idx[obj]][0]
+    
     def __len__(self):
+        """
+        Length of the heap
+        """
         return len(self._arr)
 
     def _children(self, i):
@@ -31,9 +62,30 @@ class MinPQ(object):
         return children
     
     def _parent(self, i):
+        """
+        Parameters
+        ----------
+        i: int
+            Index of a node
+        
+        Returns
+        -------
+        Index of the parent node
+        """
         return (i-1)//2
     
     def _swap(self, i, j):
+        """
+        Swap two elements in the heap, being sure to update
+        _obj2idx appropriately
+
+        Parameters:
+        ----------
+        i: int
+            Index of first node
+        j: int
+            Index of second node
+        """
         obji = self._arr[i][1]
         objj = self._arr[j][1]
         self._obj2idx[obji] = j
@@ -45,6 +97,11 @@ class MinPQ(object):
         """
         Keep bubbling the node at i up until it 
         satisfies the heap condition
+
+        Parameters
+        ----------
+        i: int
+            Node to check
         """
         if i > 0:
             parent = self._parent(i)
@@ -53,6 +110,16 @@ class MinPQ(object):
                 self._heapup(parent)
                 
     def _heapdown(self, i):
+        """
+        Keep moving a node at i down until it satisfies the
+        heap condition, swapping it with the smaller of its two
+        children if not
+
+        Parameters
+        ----------
+        i: int
+            Node to check
+        """
         children = self._children(i)
         if len(children) > 0:
             ## Make child be the smaller of the two children
@@ -66,9 +133,12 @@ class MinPQ(object):
         
     def push(self, entry):
         """
+        Add an element to the heap
+
         Parameters
         ----------
         entry: (priority, obj)
+            Priority and object to add (following python's heappush convention)
         """
         ## Step 1: Put this entry at the end of the _arr
         self._arr.append(entry)
@@ -78,8 +148,16 @@ class MinPQ(object):
         self._heapup(len(self._arr)-1)
     
     def pop(self):
+        """
+        Remove and return the element with the smallest priority from the heap
+
+        Returns
+        -------
+        (priority, obj)
+            Priority and object with the smallest priority (following python's heappop convention)
+        """
         assert(len(self._arr) > 0)
-        ret = self._arr[0][1]
+        ret = self._arr[0]
         ## Move the last element to the root
         self._arr[0] = self._arr[-1]
         ## Take off the last element
@@ -90,9 +168,12 @@ class MinPQ(object):
 
     def update(self, entry):
         """
+        Update the priority of a particular object
+
         Parameters
         ----------
         entry: (priority, obj)
+            Object to update, as well as its new priority
         """
         (new_priority, obj) = entry
         assert(obj in self)
@@ -105,6 +186,14 @@ class MinPQ(object):
             self._heapdown(idx)
     
     def draw(self, fac=1.5):
+        """
+        Draw the heap
+        
+        Parameters
+        ----------
+        fac: float
+            Factor of amount of space to put between nodes when drawing
+        """
         N = len(self._arr)
         height = int(np.ceil(np.log2(N)))
         width = 2**height
